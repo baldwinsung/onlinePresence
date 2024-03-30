@@ -91,19 +91,21 @@ def sslCertificate(dn):
             l = s.split(',')
             l.sort()
             print("Total SANs:       ", len(l))
-            for i in range(0, len(l)):
+            minusOne = (len(l) - 1)
+            for i in range(0, minusOne):
                 print("                 ", l[i])
+            print("                  ", l[minusOne])
 
 if len(sys.argv) > 1:
     domain_name = sys.argv[1]
 
     # check if edu
-    tld = domain_name.split('.')
-    if tld[1] == 'edu':
-        print("\ncannot lookup edu domains. educause is not in python-whois")
-        print("\nJust checking SSL certificate...")
-        sslCertificate(domain_name)
-        sys.exit(1)
+    #tld = domain_name.split('.')
+    #if tld[1] == 'edu':
+    #    print("\ncannot lookup edu domains. educause is not in python-whois")
+    #    print("\nJust checking SSL certificate...")
+    #    sslCertificate(domain_name)
+    #    sys.exit(1)
 
     domainWhois(domain_name)
     checkApex(domain_name)

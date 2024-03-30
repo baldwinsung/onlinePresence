@@ -1,6 +1,6 @@
 # onlinePresence
 
-Figure out the online presence for a company. Starting point is usually their internet domain name.
+Figure out the online presence for a company or academic institution. Starting point is usually their internet domain name.
 
 Displays general information about the domain and SSL certificate.
 
@@ -43,3 +43,6 @@ Total SANs      :  136
                    DNS:*.android.com
 ```
 
+# Credits
+
+Richard Penman ( https://github.com/richardpenman ) for python-whois
