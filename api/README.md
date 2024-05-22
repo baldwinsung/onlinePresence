@@ -28,6 +28,21 @@ curl -X PUT http://localhost:8000/domainwhois_created/google.com
 
 curl -X PUT http://localhost:8000/domainwhois_expires/google.com
 "Thu, 14 Sep 2028 04:00:00 GMT"
+
+curl -X PUT http://localhost:8000/sslcertificate_subject/google.com
+"CN=*.google.com"
+
+curl -X PUT http://localhost:8000/sslcertificate_issuer/google.com
+"O=Google Trust Services LLC"
+
+curl -X PUT http://localhost:8000/sslcertificate_notafter/google.com
+"Mon, 29 Jul 2024 13:42:08 GMT"
+
+curl -X PUT http://localhost:8000/sslcertificate_notbefore/google.com
+"Mon, 06 May 2024 13:42:09 GMT"
+
+curl -X PUT http://localhost:8000/sslcertificate_san/meta.com
+[" DNS:meta.com","DNS:*.meta.com"]
 ```
 
 ### Running Flask locally
