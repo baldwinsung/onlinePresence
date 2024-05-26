@@ -1,8 +1,6 @@
-import json
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 from datetime import datetime
 import ssl
-import sys
 import dns.resolver
 import OpenSSL
 import whois
@@ -10,15 +8,18 @@ from ipwhois import IPWhois
 
 app = Flask(__name__)
 
+
 @app.route('/', methods=['GET'])
 def main_page():
     x = "main page, enter the target path"
     return jsonify(x)
 
+
 @app.route('/domainwhois_registrar/<domain>', methods=['PUT'])
 def domainWhois_registrar(domain):
     w = whois.whois(domain)
     return jsonify(w.registrar)
+
 
 @app.route('/domainwhois_created/<domain>', methods=['PUT'])
 def domainWhois_created(domain):
@@ -28,6 +29,7 @@ def domainWhois_created(domain):
     else:
         return jsonify(w.creation_date)
 
+
 @app.route('/domainwhois_expires/<domain>', methods=['PUT'])
 def domainWhois_expires(domain):
     w = whois.whois(domain)
@@ -36,11 +38,12 @@ def domainWhois_expires(domain):
     else:
         return jsonify(w.expiration_date)
 
+
 @app.route('/hostingprovider/<domain>', methods=['PUT'])
 def hostingProvider(domain):
     result = dns.resolver.resolve(domain, 'A')
     for ipval in result:
-        print ('IP', ipval.to_text())
+        print('IP', ipval.to_text())
         ip_apex = ipval.to_text()
 
         if ip_apex:
@@ -59,23 +62,22 @@ def sslCertificate_subject(domain):
     c = ssl.get_server_certificate((domain, 443), timeout=5)
     x = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, c)
     cn = x.get_subject()
-    cn_str = "".join("/{:s}={:s}".format(name.decode(), value.decode()) \
+    cn_str = "".join("/{:s}={:s}".format(name.decode(), value.decode())
                      for name, value in cn.get_components())
 
     return jsonify(cn_str.split('/')[1])
+
 
 @app.route('/sslcertificate_issuer/<domain>', methods=['PUT'])
 def sslCertificate_issuer(domain):
     c = ssl.get_server_certificate((domain, 443), timeout=5)
     x = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, c)
-    cn = x.get_subject()
-    cn_str = "".join("/{:s}={:s}".format(name.decode(), value.decode()) \
-                     for name, value in cn.get_components())
     ir = x.get_issuer()
-    ir_str = "".join("/{:s}={:s}".format(name.decode(), value.decode()) \
+    ir_str = "".join("/{:s}={:s}".format(name.decode(), value.decode())
                      for name, value in ir.get_components())
 
     return jsonify(ir_str.split('/')[2])
+
 
 @app.route('/sslcertificate_notbefore/<domain>', methods=['PUT'])
 def sslCertificate_notbefore(domain):
@@ -85,6 +87,7 @@ def sslCertificate_notbefore(domain):
 
     return jsonify(nb)
 
+
 @app.route('/sslcertificate_notafter/<domain>', methods=['PUT'])
 def sslCertificate_notafter(domain):
     c = ssl.get_server_certificate((domain, 443), timeout=5)
@@ -92,6 +95,7 @@ def sslCertificate_notafter(domain):
     na = datetime.strptime(x.get_notAfter().decode('ascii'), '%Y%m%d%H%M%SZ')
 
     return jsonify(na)
+
 
 @app.route('/sslcertificate_san/<domain>', methods=['PUT'])
 def sslCertificate_san(domain):
@@ -103,12 +107,11 @@ def sslCertificate_san(domain):
         ge = x.get_extension(i)
         if 'subjectAltName' in str(ge.get_short_name()):
             s = ge.__str__()
-            l = s.split(',')
-            l.sort()
+            s = s.split(',')
+            s.sort()
 
-            return jsonify(l)
-
+            return jsonify(s)
 
 
 if __name__ == '__main__':
-   app.run(port=5000)
+    app.run(port=5000)
