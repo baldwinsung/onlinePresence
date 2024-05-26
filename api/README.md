@@ -59,6 +59,9 @@ Test the code with google.
 ```
 curl -X PUT http://localhost:5000/domainwhois_registrar/google.com
 "MarkMonitor, Inc."
+
+curl -s -X PUT http://localhost:5000/sslcertificate_san/google.com | jq . | wc -l  
+138
 ```
 
 # Credits
